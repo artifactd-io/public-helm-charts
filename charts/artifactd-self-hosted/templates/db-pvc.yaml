@@ -1,5 +1,5 @@
 ---
-{{- if and .Values.db.install }}
+{{- if and .Values.db.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
