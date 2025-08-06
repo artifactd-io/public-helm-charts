@@ -1,2 +1,2 @@
 # public-helm-charts
-Artifactd self-hosted Helm charts
+Public Artifactd Helm charts located in `./charts`

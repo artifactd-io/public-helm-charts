@@ -1,0 +1,25 @@
+apiVersion: v2
+name: application
+description: Self-host Artifacd repositories
+
+type: application
+
+version: 0.0.1
+appVersion: 0.0.1
+
+keywords:
+  - kubernetes
+  - application
+
+home: https://github.com/artifactd-io
+maintainers:
+- name: Artifactd
+  email: hello@artifactd.com
+  url: artifactd.com
+
+icon: https://github.com/artifactd-io/public-assets/blob/master/artifacted.png
+
+dependencies: 
+  - name: postgres
+    repository: oci://registry-1.docker.io/bitnamicharts/postgresql
+    version: 16.7.21
