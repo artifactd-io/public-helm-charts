@@ -1,0 +1,30 @@
+{{- if .Values.artifactd.autoscaler.enabled }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "application.name" $ }}-{{ .Values.artifactd.autoscaler.name | default "hpa" }}
+  namespace: {{ template "application.namespace" $ }}
+  {{- with (mergeOverwrite .Values.global.annotations .Values.artifactd.annotations) }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "artifactd.labels" $ | nindent 4 }}
+    {{- with (mergeOverwrite .Values.global.labels .Values.artifactd.labels) }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "application.name" . }}-{{ .Values.artifactd.name }}
+  minReplicas: {{ .Values.artifactd.autoscaler.minReplicas }}
+  maxReplicas: {{ .Values.artifactd.autoscaler.maxReplicas }}
+  metrics:
+    {{- toYaml .Values.artifactd.autoscaler.metrics | nindent 4 }}
+  {{- if .Values.artifactd.autoscaler.behavior }}
+  behavior:
+    {{- toYaml .Values.artifactd.autoscaler.behavior | nindent 4 }}
+  {{- end }}
+{{- end }}
