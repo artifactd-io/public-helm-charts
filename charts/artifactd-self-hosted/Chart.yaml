@@ -1,5 +1,5 @@
 apiVersion: v2
-name: application
+name: artifactd
 description: Self-host Artifacd repositories
 
 type: application
