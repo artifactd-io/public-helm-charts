@@ -322,6 +322,66 @@ repos:
 
 
 # --
+ingress:
+  # -- Optionally create an Nginx ingress
+  enabled: false
+  name: &ingress_name "ingress"
+
+  # -- `ingress.annotations` merges with `global.annotations`<br><br>
+  # Overrides `global.annotations` if conflicting
+  annotations: {}
+
+  # -- `ingress.labels` merges with `global.labels`<br><br>
+  # Overrides `global.labels` if conflicting
+  # @default -- `{}`<br> Helm chart automatically adds `app: {{ .Values.artifactd.name }}`
+  labels: {}
+
+  # -- The IngressClass to use when creating the Ingress
+  className: "nginx"
+
+  # -- The name of the Kubernetes Secret containing the private TLS certificate protecting the Ingress
+  tlsSecretName: &ingress_secret_name "artifactd-tls"
+
+  certificate:
+    # -- Optionally generate a TLS certificate for your ingress
+    enabled: false
+
+    # -- Defaults to `{ingress.name}-certificate` if undefined
+    name: ""
+
+    # -- `ingress.certificate.annotations` merges with `global.annotations` & `ingress.annotations`<br><br>
+    # Overrides `global.annotations` & `ingress.annotations` if conflicting
+    annotations: {}
+    # -- `ingress.certificate.labels` merges with `global.labels` & `ingress.labels`<br><br>
+    # Overrides `global.labels` & `ingress.labels` if conflicting
+    # @default -- `{}`<br> Helm chart automatically adds `app: {{ .Values.artifactd.name }}`
+    labels: {}
+
+    apiVersion: ""
+    kind: ""
+
+    # cert-manager example:
+    # apiVersion: cert-manager.io/v1
+    # kind: Certificate
+    # spec:
+    #   secretName: *ingress_secret_name
+    #   dnsNames:
+    #     - *artifactd_fqdn
+    #   issuerRef:
+    #     name: letsencrypt-prod
+    #     kind: ClusterIssuer
+
+    # GKE example:
+    # apiVersion: networking.gke.io/v1
+    # kind: ManagedCertificate
+    # spec:
+    #   domains:
+    #     - *artifactd_fqdn
+    # -- The complete spec section for the certificate, allows full flexibility for any certificate provider
+    spec: {}
+
+
+# --
 rbac:
   # -- Optionally enable RBAC, attaching a ServiceAccount with a Role & RoleBinding to the deployments
   enabled: true
@@ -339,7 +399,7 @@ rbac:
 
     # -- `db.service.labels` merges with `global.labels` & `global.db.labels`<br><br>
     # Overrides `global.labels` & `global.db.labels` if conflicting
-    # @default -- `{}`<br> Helm chart automatically adds `app: {{ .Values.terrateam.name }}`
+    # @default -- `{}`<br> Helm chart automatically adds `app: {{ .Values.artifactd.name }}`
     labels: {}
 
   # -- Namespaced Roles
